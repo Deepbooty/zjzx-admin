@@ -1,0 +1,107 @@
+require.config({
+    waitSeconds:0,
+    paths:{
+        "articelService":CONST.cdnpath+"/Backstage/service/articelService",
+        "Vue":CONST.cdnpath+"/Backstage/js/vue.min",
+        "Vuex":CONST.cdnpath+"/Backstage/js/vuex.min",
+        "Store":CONST.cdnpath+"/Backstage/store/index",
+    },
+    shim: {
+    },
+});
+define(["articelService","Vue","Vuex","Store"],function(articelService,Vue,Vuex,Store){
+    Vue.use(Vuex);
+    // debugger;
+    let vm = new Vue({
+        el:"#releaseApp",
+        data:{
+            editor:null,
+            tip:{
+                titleTip: '文章标题输入有误,请重新输入。',
+                typeTip: '文章类型选择有误,请重新选择。',
+                classifyTip: '文章分类选择有误,请重新选择。',
+                contentTip: '文章内容输入有误,请重新输入。'
+            },
+            show:{
+                titleShow:false,
+                typeShow:false,
+                classifyShow:false,
+                contentShow:false
+            },
+            desc:{
+                titleDesc:'',
+                typeDesc:'',
+                classifyDesc:'',
+                contentDesc:''
+            }
+
+        },
+        mounted(){
+            this.$nextTick(()=>{
+                this.editor = UE.getEditor('editor');
+            })
+
+        },
+        watch:{
+            "desc.titleDesc"(){
+                if(vm.desc.titleDesc) {
+                    vm.show.titleShow = false;
+                }else{
+                    vm.show.titleShow = true;
+                }
+            },
+            "desc.typeDesc"(){
+                if(vm.desc.typeDesc) {
+                    vm.show.typeShow = false;
+                }else{
+                    vm.show.typeShow = true;
+                }
+            },
+            "desc.classifyDesc"(){
+                if(vm.desc.classifyDesc) {
+                    vm.show.classifyShow = false;
+                }else{
+                    vm.show.classifyShow = true;
+                }
+            },
+
+        },
+        directives:{
+            focus: {
+                inserted: function (el) {
+                    el.focus()
+                }
+            }
+        },
+        methods:{
+            //表单验证
+            handleRelease(){
+                if(!vm.desc.titleDesc) {
+                    vm.show.titleShow = true;
+                    return false;
+                }
+                else if(!vm.desc.typeDesc) {
+                    vm.show.typeShow = true;
+                }
+                else if(!vm.desc.classifyDesc){
+                    vm.show.classifyShow = true;
+                }
+                else if(!UE.getEditor('editor').hasContents()) {
+                    vm.show.contentShow = true;
+
+                }
+
+                else{
+                    vm.show.titleShow = false;
+                    vm.show.typeShow = false;
+                    vm.show.classifyShow = false;
+                    vm.show.contentShow = false;
+                }
+                let aa=UE.getEditor('editor').getContent();
+
+            },
+        },
+
+    });
+
+});

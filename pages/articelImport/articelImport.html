@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../admin/admin.css">
+    <link rel="stylesheet" href="articelImport.css">
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <div id="importApp">
+        <div class="main">
+            <template>
+               <div class="table-responsive tab-import">
+                   <div class="tab-header">
+                       <h4 class="tab-title">文章导入</h4>
+                   </div>
+                   <table class="table table-import">
+                       <thead>
+                            <tr>
+                                <th>{{importTitle.id}}</th>
+                                <th>{{importTitle.title}}</th>
+                                <th>{{importTitle.content}}</th>
+                                <th>{{importTitle.source}}</th>
+                                <th>{{importTitle.publishtime}}</th>
+                                <th>{{importTitle.discription}}</th>
+                                <th>{{importTitle.href}}</th>
+                                <th>{{importTitle.handle}}</th>
+                            </tr>
+                       </thead>
+                       <tbody>
+                           <tr class="tabToggle" v-show="tabToggle">
+                               <td colspan="8" align="center">
+                                   <i class="iconfont icon-nomsg"></i>
+                                   <span>亲、暂无数据哦~~~</span>
+                               </td>
+                           </tr>
+                            <tr v-for="(item, index) in recordList">
+                                <td class="tab-id">{{item.id}}</td>
+                                <td class="tab-title" :title="item.title">{{item.title}}</td>
+                                <td class="tab-content" :title="item.content">{{item.content}}</td>
+                                <td class="tab-source">{{item.source}}</td>
+                                <td class="tab-time" :title="item.publishtime">{{item.publishtime}}</td>
+                                <td class="tab-desc">{{item.discription}}</td>
+                                <td class="tab-url" :title="item.href"><a :href="item.href" target="_blank">{{item.href}}</a></td>
+                                <td class="tab-btn">
+                                    <button class="btn btn-primary" @click="handleImport(item)">导入</button>
+                                    <button class="btn btn-danger" @click="handleDelete(item)">删除</button>
+                                </td>
+                            </tr>
+                       </tbody>
+                   </table>
+                   <ul class="pagination" v-show="showPage">
+                       <li v-show="pageObj.page>1" @click="{pageObj.prev()}"><a href="javascript:void(0)">上一页</a></li>
+                       <li v-show="pageObj.page>5" @click="jumpPage(1)"><a href="javascript:void(0)">1</a></li>
+                       <li v-show="showPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                       <li v-for="num in indexs" @click="jumpPage(num)" :class="{active:pageObj.page==num}"><a href="javascript:void(0)" v-text="num"></a></li>
+                       <li v-show="showPointer" v-if="showLastPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                       <li @click="{pageObj.next()}" v-show="showPrev"><a href="javascript:void(0)">下一页</a></li>
+                       <!--<li v-show="pageObj.page<pageObj.totalPage-1" @click="jumpPage(pageObj.totalPage)"><a href="javascript:void(0)" v-text="pageObj.totalPage"></a></li>-->
+                       <li><a href="javascript:void(0)" v-text="'总共 '+pageObj.totalPage+' 页'"></a></li>
+                       <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">前往第:</a></li>
+                       <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter page-input"><input type="num" class="form-control inputVal"  v-model="pageObj.changePage"  oninput="value=value.replace(/[^\d]/g,'')"></a></li>
+                       <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">页</a></li>
+                       <li v-if="showTip" @click="jumpPageSure(pageObj.changePage)"><a href="javascript:void(0)">确定</a></li>
+                   </ul>
+               </div>
+            </template>
+        </div>
+        <!--发布弹框-->
+         <!-- 发布弹框 -->
+        <transition  enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
+            <div id="publish_dialog" v-show="dialogShow"></div>
+        </transition>
+    </div>
+<script src="https://cdn.bootcss.com/quill/1.3.6/quill.js"></script>
+<script type="text/javascript" src="../../js/commonConfig.js"></script>
+
+<script type="text/javascript">
+    require(["articelImport.js?a="+new Date().getTime()],function(){
+
+    });
+
+
+</script>
+</body>
+</html>

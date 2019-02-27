@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>index.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+<link rel="stylesheet" href="kindeditor/themes/default/default.css" />
+	<link rel="stylesheet" href="http://212.64.1.189:9180/zjzx_file/kindeditor/plugins/code/prettify.css" />
+	<script charset="utf-8" src="http://212.64.1.189:9180/zjzx_file/kindeditor/kindeditor-all-min.js"></script>
+	<script charset="utf-8" src="http://212.64.1.189:9180/zjzx_file/kindeditor/lang/zh-CN.js"></script>
+	<script charset="utf-8" src="http://212.64.1.189:9180/zjzx_file/kindeditor/plugins/code/prettify.js"></script>
+	
+	<script>
+		var fileserver = "http://192.168.2.110:8080/zjzx_file/file";
+		
+		var webeditorserver = "http://212.64.1.189:9180/zjzx_file/kindeditor/"
+		
+	
+		KindEditor.ready(function(K) {
+			var editor1 = K.create('textarea[name="content1"]', {
+				cssPath : webeditorserver+'/plugins/code/prettify.css',
+//				uploadJson : fileserver+'/jsp/upload_json.jsp',
+				uploadJson : fileserver+'/uploadEditor',
+				fileManagerJson : fileserver+'/jsp/file_manager_json.jsp',
+				allowFileManager : true,
+				afterCreate : function() {
+					var self = this;
+					K.ctrl(document, 13, function() {
+						self.sync();
+						document.forms['example'].submit();
+					});
+					K.ctrl(self.edit.doc, 13, function() {
+						self.sync();
+						document.forms['example'].submit();
+					});
+				}
+			});
+			prettyPrint();
+		});
+	</script>
+  </head>
+  
+  <body>
+   <form name="example" method="post" action="demo.jsp">
+		<textarea name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"></textarea>
+		<br />
+		<input type="submit" name="button" value="提交内容" /> (提交快捷键: Ctrl + Enter)
+	</form>
+  </body>
+</html>

@@ -1,0 +1,94 @@
+
+.tab-release{
+    background-color: #fff;
+    border: 0 solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+}
+.tab-header {
+    border-bottom: 1px solid #e5e5e5;
+}
+.tab-header .tab-title {
+    line-height: 45px;
+    font-size: 16px;
+    font-weight: 700;
+    padding-left: 20px;
+    color: #666;
+    margin: 0;
+    position: relative;
+}
+
+.tab-header .tab-title:before{
+    content: "";
+    display: block;
+    width: 4px;
+    height: 16px;
+    background-color: #337ab7;
+    position: absolute;
+    top: 14px;
+    left: 10px;
+}
+
+.tab-body {
+    padding: 20px 25px;
+}
+.tab-release-item {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 25px;
+    /*text-align: center;*/
+}
+.tab-release-editor{
+    height: auto;
+    line-height: normal;
+}
+.tab-release-item>label {
+    display: inline-block;
+    width: 100px;
+    margin-bottom: 0;
+}
+.tab-release-item .input {
+    width: calc(100% - 100px - 45%);
+}
+.tab-release-item .editor {
+    width: calc(100% - 100px - 35%);
+}
+.edui-default{
+    width: 100%;
+}
+.tab-release-item .select {
+    display: inline-block;
+    width: calc(100% - 100px - 55%);
+    height: 100%;
+}
+.tab-release-item .input input,
+.tab-release-item .input select{
+    height: 40px;
+}
+.tab-release-item .tab-release-tip{
+    margin: 0 0 0 1%;
+    width: 32%;
+    text-align: left;
+    color: #da3838;
+    height: 40px;
+    line-height: 40px;
+}
+.tab-release-tip i,.tab-release-tip span{
+    display: inline-block;
+    color: #ed1c24;
+    margin-right: 20px;
+    font-size: 12px;
+}
+.tab-release-tip span{
+    font-size: 14px;
+}
+.edui-editor-iframeholder {
+    height: 300px !important;
+}
+
+.release-bth{
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    margin: 0 auto;
+}

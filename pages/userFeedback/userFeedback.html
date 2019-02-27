@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户反馈</title>
+    <link rel="stylesheet" href="../admin/admin.css">
+    <link rel="stylesheet" href="userFeedback.css">
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <div id="feedbackApp">
+        <div class="main">
+            <template>
+                <div class="table-responsive tab-feedback">
+                    <div class="tab-header">
+                        <h4 class="tab-title">用户反馈</h4>
+                    </div>
+                    <div class="tab-body">
+                        <table class="table table-feedback">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>用户</th>
+                                    <th>内容</th>
+                                    <th>图片</th>
+                                    <th>反馈时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="tabToggle" v-show="tabToggle">
+                                    <td colspan="6" align="center">
+                                        <i class="iconfont icon-nomsg"></i>
+                                        <span>亲、暂无数据哦~~~</span>
+                                    </td>
+                                </tr>
+                                <tr v-for="(item,index) in recordList">
+                                    <td class="tab-index">{{index+1}}</td>
+                                    <td class="tab-id">{{item.userid}}</td>
+                                    <td class="tab-content" :title="item.content">{{item.content}}</td>
+                                    <td class="tab-img">
+                                        <img :src="item.image" v-if="item.image">
+                                        <span v-else class="text-muted">{{altDesc}}</span>
+                                    </td>
+                                    <td class="tab-time">{{item.createtime}}</td>
+                                    <td class="tab-btn">
+                                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detailModal" @click=handleDetail(item)>
+                                            查看详情
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-footer">
+                        <ul class="pagination" v-show="showPage">
+                            <li v-show="pageObj.page>1" @click="{pageObj.prev()}"><a href="javascript:void(0)">上一页</a></li>
+                            <li v-show="pageObj.page>5" @click="jumpPage(1)"><a href="javascript:void(0)">1</a></li>
+                            <li v-show="showPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                            <li v-for="num in indexs" @click="jumpPage(num)" :class="{active:pageObj.page==num}"><a href="javascript:void(0)" v-text="num"></a></li>
+                            <li v-show="showPointer" v-if="showLastPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                            <li @click="{pageObj.next()}" v-show="showPrev"><a href="javascript:void(0)">下一页</a></li>
+                            <li><a href="javascript:void(0)" v-text="'总共 '+pageObj.totalPage+' 页'"></a></li>
+                            <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">前往第:</a></li>
+                            <li v-if="showTip">
+                                <a href="javascript:void(0)" class="page-fiter page-input">
+                                    <input type="num" class="form-control inputVal" v-model="pageObj.changePage" oninput="value=value.replace(/[^\d]/g,'')">
+                                </a>
+                            </li>
+                            <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">页</a></li>
+                            <li v-if="showTip" @click="jumpPageSure(pageObj.changePage)"><a href="javascript:void(0)">确定</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </template>
+        </div>
+        <template>
+            <div class="modal fade" id="detailModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ref="modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel" style="font-size: 16px;">
+                            反馈详情
+                        </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-item modal-item-text clearfix">
+                                <label class="pull-left">用户Id:</label>
+                                <div class="pull-left">
+                                    <p>{{modalItem.id}}</p>
+                                </div>
+                            </div>
+                            <div class="modal-item  modal-item-text clearfix">
+                                <label class="pull-left">反馈时间:</label>
+                                <div class="pull-left">
+                                    <p>{{modalItem.createtime}}</p>
+                                </div>
+                            </div>
+                            <div class="modal-item clearfix">
+                                <label class="pull-left">反馈图片:</label>
+                                <div class="pull-left">
+                                    <div class="modal-img">
+                                        <img :src="modalItem.image" v-if="modalItem.image">
+                                        <span v-else class="text-muted">{{altDesc}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-item clearfix">
+                                <label class="pull-left">反馈内容:</label>
+                                <div class="pull-left">
+                                    <p>{{modalItem.content}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-toggle='modal' id="notGoBtn">回复反馈</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        </template>
+         <div class="dmodal" ref="dmodal">
+            <div class="mask"></div>
+            <div class="dmodal-content">
+                <div class="dmodal-header clearfix">
+                    <h4 class="dmodal-title pull-left">回复反馈</h4>
+                    <span class="dmodal-close pull-right">x</span>
+                </div>
+                <div class="dmodal-body">
+                    <div class="dmodal-body-textArea">
+                        <textarea class="form-control"  v-model="textDesc" placeholder="请输入回复反馈内容..." id="details"></textarea>
+                    </div>
+                </div>
+                <div class="dmodal-footer">
+                    <button type="button" class="btn btn-primary" @click="handleSure(modalItem)">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="../../js/commonConfig.js"></script>
+    <script type="text/javascript">
+    require(["userFeedback.js?a=" + new Date().getTime()], function() {
+
+    });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="address=no">
+    <script type="text/javascript" src="txapi.js"></script>
+    <title>locationPicker Components Demo - iframe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body, html{
+            overflow: hidden;
+        }
+    </style>
+    <script src="mapUtil.js"></script>
+    <script>
+        //iframe页面调用方法
+        $(function(){ 
+			mapUtil.load(function(data){
+				console.log(data);
+				debugger;
+				parent.setAdd(data);
+				//{publishaddresses: "君悦玺园", latitude: 30.66268, longitude: 117.48011, publishstreet: "安徽省池州市贵池区君悦广�?百牙西路�?"}
+			});
+        });
+    </script>
+</head>
+<body>
+    <!-- 通过 iframe 嵌入地图选点组件 --> 
+    <iframe id="iframe" width="100%" frameborder=0 scrolling="no"
+        src="//apis.map.qq.com/tools/locpicker?search=1&type=1&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
+    </iframe>
+</body>

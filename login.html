@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>后台登录</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="fonts/iconfont.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+    <div class="container-fluid wrap">
+        <div class="sigin">
+            <div class="login-title">
+                <h2>直击真相后台登录</h2>
+                <span>Go straight to the truth</span>
+            </div>
+            <form class="form-horizontal" id="login-form" action="javascript:void(0)" role="form">
+                <div class="form-group form-item">
+                    <i class="iconfont icon-user"></i>
+                    <input type="text" class="form-control" id="userName" name="userName" placeholder="请输入手机号">
+                </div>
+                <span class="text-tip mobile-tip"></span>
+                <div class="form-group form-item">
+                    <i class="iconfont icon-code"></i>
+                    <input type="text" class="form-control user-code" id="userCode" name="userCode" placeholder="请输入手机验证码">
+                    <button class="btn btn-info login-code" id="getCode">获取验证码</button>
+                </div>
+                <span class="text-tip code-tip"></span>
+                <div class="login-btn">
+                    <button class="btn btn-lg btn-danger no-choose" id="logining">登录</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/service/loginService.js"></script>
+    <script>
+    $(function() {
+    	let step = 60;
+    	$('#getCode').click(function(){
+    		$.ajax({
+    			type:"post",
+    			url:"http://212.64.1.189:8080/zjzxmanager/getCode",
+    			data:{
+    				code:code
+    			},
+    			async:true,  //true为异步，false为同步
+    			success(data){
+    				
+    			}
+    		})
+    	})
+    	//登录表单验证 调接口
+        $("#logining").click(function() {
+        	let userObj = new Object();
+        	userObj.mobileVal = $.trim($("#userName").val());
+        	userObj.codeVal = $.trim($("#userCode").val());
+            userObj.mobileReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+            userObj.codeReg = /^\d{4}$/;
+
+            if(userObj.mobileVal == "" || userObj.codeVal == null) {
+            	$('#userName').focus();
+            	$('.mobile-tip').html('请输入您的手机号码');
+
+            }else if(!userObj.mobileReg.test(userObj.mobileVal)){
+            	$('#userName').focus();
+            	$('.mobile-tip').html('请输入正确的手机号码');
+            }
+
+            else if(userObj.codeVal == "" || userObj.mobileVal == null) {
+            	$('#userCode').focus();
+            	$('.code-tip').html('请输入手机验证码')
+            }else if(!userObj.codeReg.test(userObj.codeVal)){
+            	$('#userCode').focus();
+            	$('.code-tip').html('请输入四位数字的验证码');
+            } else{
+            	$('.text-tip').html('');
+            }
+        
+        })
+    })
+    </script>
+</body>
+
+</html>

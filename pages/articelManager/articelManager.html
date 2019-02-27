@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文章管理</title>
+    <link rel="stylesheet" href="../admin/admin.css">
+    <link rel="stylesheet" href="articelManager.css">
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <div id="articelApp">
+        <div class="main">
+            <template>
+                 <div class="table-responsive tab-article">
+                    <div class="tab-header clearfix">
+                        <h4 class="tab-title pull-left">文章管理</h4>
+                        <div class="btn-group btn-auditing pull-left">
+                        </div>
+                        <div class="btn-group btn-auditing pull-right">
+                            <button type="button" class="btn btn-success" @click="btnClick(3)">审核通过</button>
+                            <button type="button" class="btn btn-warning" @click="btnClick(1)">正在审核</button>
+                            <button type="button" class="btn btn-danger" @click="btnClick(4)">审核未通过</button>
+                             <button type="button" class="btn btn-primary" @click="handlePublish">文章发布</button>
+                             <button type="button" class="btn btn-info" @click="handlePublishVideo">视频发布</button>
+                        </div>
+                        <div class="tab-search pull-right clearfix">
+                            <div class="tab-input pull-left">
+                                <input type="text" placeholder="搜索关键词..." v-model.trim="keyword" id="keywords">
+                                <i class="iconfont icon-search"></i>
+                            </div>
+                            <button type="button" class="btn btn-info btn-sm pull-left" @click="handleSearch">搜索</button>
+                        </div>
+                    </div>
+                    <table class="table table-manager">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>id</th>
+                                <th>发布人</th>
+                                <th>标题</th>
+                                <th>内容</th>
+                                <th>权重</th>
+                                <th>发布时间</th>
+                                <th>发布地区</th>
+                                <th>审核状态</th>
+                                <th  v-if="showReason">未通过理由</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           <tr v-show="tabToggle" class="tabToggle"><td colspan="8" align="center">
+                               <i class="iconfont icon-nomsg"></i>
+                               <span>亲、暂无数据哦~~~</span>
+                           </td></tr>
+                            <tr v-for="(item,index) in recordList">
+                                <td class="tab-index">{{index+1}}</td>
+                                <td class="tab-id" :title="item.id">{{item.id}}</td>
+                                <td class="tab-author" :title="item.author">{{item.username}}</td>
+                                <td class="tab-tit" :title="item.title">{{item.title}}</td>
+
+                                <td v-if="item.type !=2" class="tab-content"  :title="item.content"  v-html="delHtmlTag(item.content)"></td>
+                                <td class="tab-content" v-for="(items, index) in item.articleFile" v-else>
+                                    <img :src="fileRoot + items.thumbnail">
+                                </td>
+                                <td class="tab-weight">{{item.weight}}</td>
+                                <td class="tab-pulishtime" :title="item.publishtime">{{item.publishtime}}</td>
+                                <td class="tab-publisharea" :title="item.publisharea">{{item.publisharea}}</td>
+                                <td class="tab-state" :title="stateMap[item.state]">{{stateMap[item.state]}}</td>
+                                <td class="tab-checknoreason" v-if="showReason" :title="item.checknoreason">{{item.checknoreason}}</td>
+                                <td class="tab-btn">
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @click="handleClick(item)">
+                                            详情
+                                        </button>
+                                        <button type="button" class="btn btn-warning" @click="handleImport(item)">
+                                            编辑
+                                        </button>
+                                        <button type="button" class="btn btn-danger" @click="handleDelete(item)">
+                                            删除
+                                        </button>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ul class="pagination" v-show="showPage">
+                        <li v-show="pageObj.page>1" @click="{pageObj.prev()}"><a href="javascript:void(0)">上一页</a></li>
+                        <li v-show="pageObj.page>5" @click="jumpPage(1)"><a href="javascript:void(0)">1</a></li>
+                        <li v-show="showPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                        <li v-for="num in indexs" @click="jumpPage(num)" :class="{active:pageObj.page==num}"><a href="javascript:void(0)" v-text="num"></a></li>
+                        <li v-show="showPointer" v-if="showLastPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                        <li @click="{pageObj.next()}" v-show="showPrev"><a href="javascript:void(0)">下一页</a></li>
+                        <li><a href="javascript:void(0)" v-text="'总共 '+pageObj.totalPage+' 页'"></a></li>
+                        <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">前往第:</a></li>
+                        <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter page-input"><input type="num" class="form-control inputVal"  v-model="pageObj.changePage"  oninput="value=value.replace(/[^\d]/g,'')"></a></li>
+                        <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">页</a></li>
+                        <li v-if="showTip" @click="jumpPageSure(pageObj.changePage)"><a href="javascript:void(0)">确定</a></li>
+                    </ul>
+                </div>
+            </template>
+        </div>
+
+        <!-- 发布文章弹框 -->
+        <transition  enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
+            <div id="publish_dialog" v-show="dialogShow"></div>
+        </transition>
+        <!-- 发布视频弹框 -->
+        <transition  enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
+            <div id="video_dialog" v-show="videoShow"></div>
+        </transition>
+        <div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ref="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">×
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            文章审核
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-item modal-time clearfix">
+                            <label class="pull-left">发布人:</label>
+                            <div class="pull-left">
+                                <p v-text="modalItem.author"></p>
+                            </div>
+                        </div>
+                        <div class="modal-item modal-time clearfix">
+                            <label class="pull-left">发布时间:</label>
+                            <div class="pull-left">
+                                <p v-text="modalItem.publishtime"></p>
+                            </div>
+                        </div>
+                        <div class="modal-item modal-time clearfix">
+                            <label class="pull-left">文章权重:</label>
+                            <div class="pull-left">
+                                <p v-text="modalItem.weight"></p>
+                            </div>
+                        </div>
+                        <div class="modal-item modal-title clearfix">
+                            <label class="pull-left">文章标题:</label>
+                            <p class="pull-left" v-text="modalItem.title"></p>
+                        </div>
+                        <div class="modal-item modal-cont clearfix">
+                            <label class="pull-left">文章内容:</label>
+                            <div class="pull-left">
+                                <p v-html="modalItem.content"></p>
+                                <div v-for="(item,index) in modalItem.articleFile">
+                                    <img :src="fileRoot + item.thumbnail" alt="">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="sure(modalItem)">
+                            审核通过
+                        </button>
+                        <button type="button" class="btn btn-danger" data-toggle='modal' id="notGoBtn">审核不通过</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <div class="dmodal" ref="dmodal">
+            <div class="mask"></div>
+            <div class="dmodal-content">
+                <div class="dmodal-header clearfix">
+                    <h4 class="dmodal-title pull-left">审核未通过理由</h4>
+                    <span class="dmodal-close pull-right">x</span>
+                </div>
+                <div class="dmodal-body">
+                    <h4>请填写审核未通过理由:</h4>
+                    <div class="dmodal-body-textArea">
+                        <textarea class="form-control"  :class="{hasError:hasError}"  v-model="textDesc" placeholder="请输入未通过理由"></textarea>
+                    </div>
+                </div>
+                <div class="dmodal-footer">
+                    <button type="button" class="btn btn-primary" @click="submitResult(modalItem)">提交审核理由</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.bootcss.com/quill/1.3.6/quill.js"></script>
+    <script type="text/javascript" src="../../js/commonConfig.js"></script>
+
+    <script type="text/javascript">
+        require(["articelManager.js?a="+new Date().getTime()],function(){
+
+        });
+
+        function delHtmlTag(str){
+            return str.replace(/<[^>]+>/g,"");
+        }
+    </script>
+</body>
+</html>

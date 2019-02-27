@@ -1,0 +1,126 @@
+require.config({
+    waitSeconds:0,
+    paths:{
+        "articelService":CONST.cdnpath+"/Backstage/service/articelService",
+        "articelClassifyService":CONST.cdnpath+"/Backstage/service/articelClassifyService",
+        "Vue":CONST.cdnpath+"/Backstage/js/vue.min",
+        "Vuex":CONST.cdnpath+"/Backstage/js/vuex.min",
+        "Store":CONST.cdnpath+"/Backstage/store/index",
+    },
+    shim: {
+    },
+});
+define(["articelService","articelClassifyService","Vue","Vuex","Store"],function(articelService,articelClassifyService,Vue,Vuex,Store){
+    Vue.use(Vuex);
+    // debugger;
+    let vm = new Vue({
+        el:"#releaseApp",
+        data:{
+            editor:null,
+            classfyList:[],
+            tip:{
+                titleTip: '文章标题输入有误,请重新输入。',
+                typeTip: '文章类型选择有误,请重新选择。',
+                classifyTip: '文章分类选择有误,请重新选择。',
+                contentTip: '文章内容输入有误,请重新输入。'
+            },
+            show:{
+                titleShow:false,
+                typeShow:false,
+                classifyShow:false,
+                contentShow:false
+            },
+            desc:{
+                titleDesc:'',
+                typeDesc:'',
+                classifyDesc:'',
+                contentDesc:''
+            },
+            record:{
+                title:'',
+                content:'',
+                type:[
+                    {num:1,text:图文},
+                    {num:0,}
+                ],
+                classify:0,
+                publishtime:''
+            },
+        },
+        mounted(){
+            this.$nextTick(()=>{
+                this.editor = UE.getEditor('editor');
+                let calssifyData = articelClassifyService.getArticleClassifyList();
+                this.classfyList = calssifyData.result.classfyList;
+                // let data = articelService.publishArticle(this.record,this.record_file);
+                // console.log(data)
+                loadRelease();
+            })
+        },
+        watch:{
+            "record.title"(){
+                if(vm.record.title) {
+                    vm.show.titleShow = false;
+                }else{
+                    vm.show.titleShow = true;
+                }
+            },
+            "record.type"(){
+                if(vm.record.type) {
+                    vm.show.typeShow = false;
+                }else{
+                    vm.show.typeShow = true;
+                }
+            },
+            "record.classify"(){
+                if(vm.record.classify) {
+                    vm.show.classifyShow = false;
+                }else{
+                    vm.show.classifyShow = true;
+                }
+            },
+
+        },
+        directives:{
+            focus: {
+                inserted: function (el) {
+                    el.focus()
+                }
+            }
+        },
+        methods:{
+            //表单验证
+            handleRelease(){
+                if(!vm.record.title) {
+                    vm.show.titleShow = true;
+                    return false;
+                }
+                else if(!vm.record.type) {
+                    vm.show.typeShow = true;
+                }
+                else if(!vm.classifyList){
+                    vm.show.classifyShow = true;
+                }
+                else if(!UE.getEditor('editor').hasContents()) {
+                    vm.show.contentShow = true;
+
+                }
+                else{
+                    vm.show.titleShow = false;
+                    vm.show.typeShow = false;
+                    vm.show.classifyShow = false;
+                    vm.show.contentShow = false;
+                }
+                let aa=UE.getEditor('editor').getContent();
+
+            },
+        },
+
+    });
+    function loadRelease(){
+        // debugger;
+        let data = articelService.publishArticle(vm.record);
+        console.log(data)
+    }
+
+});

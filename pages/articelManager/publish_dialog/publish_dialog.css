@@ -1,0 +1,142 @@
+.publish-dialog{
+    position: relative;
+}
+.pulish-dialog .mask{
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 998;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+}
+.pulish-dialog .dialog-content {
+    width: 800px;
+    height: 760px;
+    position: absolute;
+     left: 0;
+    bottom: 0;
+    right: 0;
+    top: -20px;
+    padding: 10px;
+    margin: auto;
+    z-index: 999;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 4px rgba(0,0,0,.5);
+    box-shadow: 0 3px 4px rgba(255,255,255,.5);
+    background-color: #fff;
+}
+.dialog-header {
+    height: 45px;
+    line-height: 45px;
+    border-bottom: 2px solid #e5e5e5;
+}
+.dialog-header h4{
+    position: relative;
+    font-size: 16px;
+    padding-left: 10px;
+    font-weight: 500;
+    color: #337ab7;
+}
+.dialog-header h4:before{
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 16px;
+    background-color: #337ab7;
+}
+
+.dialog-header > span{
+    font-size: 24px;
+    font-weight: 700;
+    position: relative;
+    top: -8px;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=40);
+    opacity: .4;
+    cursor: pointer;
+}
+.dialog-header > span:hover{
+    color: #000;
+    opacity: .6;
+}
+
+.dialog-body{
+    padding: 15px 10px;
+    height: 666px;
+    overflow-x: auto;:
+}
+.dialog-item {
+    width: 100%;
+    /*height: 40px;*/
+    margin-bottom: 10px;
+}
+.dialog-con{
+    height: auto;
+}
+.dialog-item > label{
+    width: 90px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.dialog-item .dialog-input{
+    width: 380px;
+    height: 40px;
+}
+.dialog-item .dialog-input input{
+    height: 100%;
+}
+
+.dialog-item .dialog-select{
+    width: 300px;
+    height: 40px;
+}
+.dialog-item .dialog-random{
+    width: 200px;
+    line-height: 40px;
+    font-weight: 600;
+}
+.dialog-item .dialog-button{
+    padding: 0 12px;
+    height: 35px;
+    line-height: 35px;
+    background-color: #3498db;
+    text-align: center;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+
+}
+.dialog-item .dialog-icon .iconfont{
+    font-size: 24px;
+    font-weight: 600;
+}
+.dialog-item .dialog-select select{
+    height: 100%;
+}
+.dialog-item .dialog-editor {
+    width: 600px;
+}
+.dialog-item .dialog-editor #eidtor{
+    width: 100%;
+    height: 300px;
+}
+.dialog-body .dialog-btn{
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    margin: 0 auto;
+}
+
+.ql-container{
+    height: 260px !important;
+}

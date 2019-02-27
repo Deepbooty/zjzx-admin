@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>新闻资讯</title>
+    <link rel="stylesheet" href="../admin/admin.css">
+    <link rel="stylesheet" href="newsInfo.css">
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <div id="newsApp">
+        <div class="main">
+            <template>
+                <div class="table-responsive tab-news">
+                    <div class="tab-header clearfix">
+                        <h4 class="tab-title pull-left">新闻资讯</h4>
+                        <div class="btn-group btn-auditing pull-right">
+                            <button type="button" class="btn btn-primary" @click="handleAdd">新闻发布</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-manager">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>发布人</th>
+                            <th>发布时间</th>
+                            <th>新闻标题</th>
+                            <th>新闻内容</th>
+                            <th>新闻图片</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tabToggle" v-show="tabToggle">
+                            <td colspan="45" align="center">
+                                <i class="iconfont icon-nomsg"></i>
+                                <span>亲、暂无数据哦~~~</span>
+                            </td>
+                        </tr>
+                        <tr v-for="(item,index) in recordList">
+                            <td class="tab-index">{{index+1}}</td>
+                            <td class="tab-id">{{item.creatorid}}</td>
+                            <td class="tab-time">{{item.createtime}}</td>
+                            <td class="tab-tit">{{item.title}}</td>
+                            <td class="tab-desc">{{item.content}}</td>
+                            <td class="tab-img">
+                                <img :src="fileRoot + item.imagepath" v-if="item.imagepath">
+                                <span v-else class="text-muted">{{altDesc}}</span>
+                            </td>
+                            <td class="tab-btn">
+                                <button type="button" class="btn btn-warning" @click="handleEdit(item)">编辑</button>
+                                <button type="button" class="btn btn-danger" @click="handleDelete(item)">删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul class="pagination" v-show="showPage">
+                    <li v-show="pageObj.page>1" @click="{pageObj.prev()}"><a href="javascript:void(0)">上一页</a></li>
+                    <li v-show="pageObj.page>5" @click="jumpPage(1)"><a href="javascript:void(0)">1</a></li>
+                    <li v-show="showPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                    <li v-for="num in indexs" @click="jumpPage(num)" :class="{active:pageObj.page==num}"><a href="javascript:void(0)" v-text="num"></a></li>
+                    <li v-show="showPointer" v-if="showLastPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                    <li @click="{pageObj.next()}" v-show="showPrev"><a href="javascript:void(0)">下一页</a></li>
+                    <!--<li v-show="pageObj.page<pageObj.totalPage-1" @click="jumpPage(pageObj.totalPage)"><a href="javascript:void(0)" v-text="pageObj.totalPage"></a></li>-->
+                    <li><a href="javascript:void(0)" v-text="'总共 '+pageObj.totalPage+' 页'"></a></li>
+                    <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">前往第:</a></li>
+                    <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter page-input"><input type="num" class="form-control inputVal"  v-model="pageObj.changePage"  oninput="value=value.replace(/[^\d]/g,'')"></a></li>
+                    <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">页</a></li>
+                    <li v-if="showTip" @click="jumpPageSure(pageObj.changePage)"><a href="javascript:void(0)">确定</a></li>
+                </ul>
+            </template>
+        </div>
+        <!--新闻发布弹框-->
+        <template>
+            <transition  enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
+                <div class="news-modal" v-show="dialogShow">
+                    <div class="mask"></div>
+                    <div class="news-modal-content">
+                        <div class="news-modal-header clearfix">
+                            <h4 class="pull-left">{{dialogTit}}</h4>
+                            <span class="pull-right" @click="handleCancel(2)">x</span>
+                        </div>
+                        <div class="news-modal-body">
+                            <div class="form-group news-modal-item clearfix">
+                                <label for="title" class="pull-left">标题:</label>
+                                <input type="text"
+                                       class="form-control pull-left"
+                                       id="title"
+                                       v-model="recordObj.title"
+                                       placeholder="请输入新闻标题...">
+                                <span class="required pull-right">*</span>
+                            </div>
+
+                            <div class="error" v-text="error.titError"></div>
+
+                            <div class="form-group news-modal-item clearfix">
+                                <label for="content" class="pull-left">内容:</label>
+                                <textarea class="form-control pull-left"
+                                          placeholder="请输入新闻内容..."
+                                          v-model="recordObj.content"
+                                          id="content"></textarea>
+                                <span class="required pull-right">*</span>
+                            </div>
+                            <div class="error" style="margin-top: 4px;" v-text="error.descError"></div>
+                            <div class="form-group news-modal-item clearfix">
+                                <label class="pull-left">添加图片:</label>
+
+                                <div class="news-add-img pull-left">
+                                    <button type="button" id="btn" class="btn btn-primary news-btn">
+                                        上传图片
+                                        <i class="iconfont icon-add"></i>
+                                    </button>
+                                    <input type="file" name="file" id="file" style="display: none;" accept="image/png,image/jpg,image/jpeg">
+                                    <div class="news-img">
+                                        <img :src="fileRoot + recordObj.imagepath" v-show="imgShow">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="error" style="margin-top: 4px;" v-text="error.imageError"></div>
+                        </div>
+                        <div class="news-modal-footer" v-show="setShow">
+                            <button class="btn btn-primary" @click="handleSendNews(1)">发布</button>
+                            <button class="btn btn-danger" @click="handleCancel(1)">取消</button>
+                        </div>
+                        <div class="news-modal-footer" v-show="saveShow">
+                            <button class="btn btn-primary" @click="handleSendNews(2,recordList)">保存</button>
+                            <button class="btn btn-danger" @click="handleCancel(2)">取消</button>
+                        </div>
+
+                    </div>
+                </div>
+            </transition>
+        </template>
+    </div>
+    <script type="text/javascript" src="../../js/commonConfig.js"></script>
+    <script type="text/javascript">
+        require(["newsInfo.js?a="+new Date().getTime()],function(){
+
+        });
+    </script>
+</body>
+</html>

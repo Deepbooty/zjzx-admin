@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>在线留言</title>
+    <link rel="stylesheet" href="../admin/admin.css">
+    <link rel="stylesheet" href="onlineMessage.css">
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+<div id="onlineApp">
+    <div class="main">
+        <template>
+            <div class="table-responsive tab-message">
+                <div class="tab-header">
+                    <h4 class="tab-title">在线留言</h4>
+                </div>
+                <div class="tab-body">
+                    <table class="table table-feedback">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>ID</th>
+                            <th>会员姓名</th>
+                            <th>手机号码</th>
+                            <th>留言内容</th>
+                            <th>留言时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="tabToggle" v-show="tabToggle">
+                            <td colspan="6" align="center">
+                                <i class="iconfont icon-nomsg"></i>
+                                <span>亲、暂无数据哦~~~</span>
+                            </td>
+                        </tr>
+                            <tr v-for="(item,index) in recordList">
+                                <td class="tab-index">{{index + 1}}</td>
+                                <td class="tab-id">{{item.id}}</td>
+                                <td class="tab-name">{{item.membername}}</td>
+                                <td class="tab-tel">{{item.mobile}}</td>
+                                <td class="tab-content">{{item.content}}</td>
+                                <td class="tab-time">{{item.createtime}}</td>
+                                <td class="tab-btn">
+                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detailModal" @click=handleDetail(item)>
+                                        查看详情
+                                    </button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-footer">
+                    <ul class="pagination" v-show="showPage">
+                        <li v-show="pageObj.page>1" @click="{pageObj.prev()}"><a href="javascript:void(0)">上一页</a></li>
+                        <li v-show="pageObj.page>5" @click="jumpPage(1)"><a href="javascript:void(0)">1</a></li>
+                        <li v-show="showPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                        <li v-for="num in indexs" @click="jumpPage(num)" :class="{active:pageObj.page==num}"><a href="javascript:void(0)" v-text="num"></a></li>
+                        <li v-show="showPointer" v-if="showLastPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                        <li @click="{pageObj.next()}" v-show="showPrev"><a href="javascript:void(0)">下一页</a></li>
+                        <li><a href="javascript:void(0)" v-text="'总共 '+pageObj.totalPage+' 页'"></a></li>
+                        <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">前往第:</a></li>
+                        <li v-if="showTip">
+                            <a href="javascript:void(0)" class="page-fiter page-input">
+                                <input type="num" class="form-control inputVal" v-model="pageObj.changePage" oninput="value=value.replace(/[^\d]/g,'')">
+                            </a>
+                        </li>
+                        <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">页</a></li>
+                        <li v-if="showTip" @click="jumpPageSure(pageObj.changePage)"><a href="javascript:void(0)">确定</a></li>
+                    </ul>
+                </div>
+            </div>
+        </template>
+    </div>
+    <!--新闻发布弹框-->
+    <template>
+        <transition  enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
+            <div class="news-modal" v-show="dialogShow">
+                <div class="mask" @click="handleCancel"></div>
+                <div class="news-modal-content">
+                    <div class="news-modal-header clearfix">
+                        <h4 class="pull-left">在线留言</h4>
+                        <span class="pull-right" @click="handleCancel">x</span>
+                    </div>
+                    <div class="news-modal-body">
+                        <div class="form-group news-modal-item clearfix">
+                            <label  class="pull-left text-primary">留言Id:</label>
+                            <div class="pull-left">{{modalItem.id}}</div>
+                        </div>
+                        <div class="form-group news-modal-item clearfix">
+                            <label  class="pull-left text-primary">留言时间:</label>
+                            <div class="pull-left">{{modalItem.createtime}}</div>
+                        </div>
+                        <div class="form-group news-modal-item clearfix">
+                            <label  class="pull-left text-primary">会员姓名:</label>
+                            <div class="pull-left">{{modalItem.membername}}</div>
+                        </div>
+                        <div class="form-group news-modal-item clearfix">
+                            <label  class="pull-left text-primary">手机号码:</label>
+                            <div class="pull-left">{{modalItem.mobile}}</div>
+                        </div>
+                        <div class="form-group news-modal-item clearfix">
+                            <label  class="pull-left text-primary">留言内容:</label>
+                            <div class="pull-left">{{modalItem.content}}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </transition>
+    </template>
+</div>
+<script type="text/javascript" src="../../js/commonConfig.js"></script>
+<script type="text/javascript">
+    require(["onlineMessage.js?a=" + new Date().getTime()], function() {
+
+    });
+</script>
+</body>
+
+</html>

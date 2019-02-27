@@ -1,0 +1,245 @@
+
+.tab-template{
+    background-color: #fff;
+    border: 0 solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+}
+.tab-header{
+   border-bottom: 2px solid #eee;
+}
+.tab-header .tab-title {
+   line-height: 50px;
+    font-size: 16px;
+    font-weight: 700;
+    padding-left: 20px;
+    color: #666;
+    margin: 0;
+    position: relative;
+}
+.tab-header .tab-title:before{
+     content: "";
+    display: block;
+    width: 4px;
+    height: 16px;
+    background-color: #337ab7;
+    position: absolute;
+    top: 16px;
+    left: 10px;
+}
+.tab-template tbody tr{
+    cursor: pointer;
+}
+.tab-template tbody tr:hover{
+    background-color: #f4f5f6;
+}
+
+.tab-template th,
+.tab-template td{
+    text-align: center;
+}
+.tab-template tbody tr td{
+    height: 50px;
+    padding: 0;
+    line-height: 50px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.tab-id{width: 70px; max-width: 70px;}
+.tab-tit{width: 120px; max-width: 120px;}
+.tab-desc{width: 120px; max-width: 120px;}
+.tab-content{width: 160px; max-width: 160px;}
+.tab-userid{width: 70px; max-width: 70px;}
+.tab-type{width: 130px; max-width: 130px;}
+.tab-createtime{width: 145px; max-width: 145px;}
+.tab-btn{width: 135px; max-width: 135px;}
+
+.tab-header button{
+    margin-top: 9px;
+    margin-right: 15px;
+}
+.tab-header button i{
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+/*弹框*/
+
+.temp-modal {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 99999;
+    margin: auto;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    /*display: none;*/
+}
+
+.temp-modal .mask{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+.temp-modal-content {
+    width: 500px;
+    height: 480px;
+    background-color: #fff;
+    position: absolute;
+    z-index: 99999;
+    top: 40%;
+    left: 50%;
+    padding: 10px;
+    margin-top: -240px;
+    margin-left: -250px;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #666;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(255,255,255,.5);
+}
+.temp-modal-header {
+    height: 45px;
+    line-height: 45px;
+    border-bottom: 1px solid #e5e5e5;
+}
+.temp-modal-header h4{
+    position: relative;
+    font-size: 16px;
+    padding-left: 10px;
+    color: #337ab7;
+}
+.temp-modal-header h4:before{
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 16px;
+    background-color: #337ab7;
+}
+.temp-modal-header span{
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+    cursor: pointer;
+}
+.temp-modal-header span:hover{
+    color: #000;
+    opacity: .5;
+}
+.temp-modal-body {
+    padding: 15px;
+}
+.temp-modal-body .temp-modal-item{
+    width: 100%;
+}
+.form-group{
+    margin-bottom: 0;
+}
+.temp-modal-body .temp-modal-item label {
+    display: block;
+    width: 15%;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 32px;
+}
+.temp-modal-body .temp-modal-item input {
+    display: block;
+    width: 80%;
+}
+.temp-modal-body .temp-modal-item textarea {
+    display: block;
+    width: 80%;
+    height: 125px;
+    resize: none;
+}
+.temp-modal-body .temp-modal-item .select-box{
+    width: 80%;
+}
+.temp-modal-body .temp-modal-item select {
+    width: 100%;
+}
+.temp-modal-body .temp-modal-item .required{
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    color: #d9534f;
+    display: flex;
+    justify-items: center;
+}
+.temp-modal-footer {
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+}
+.temp-modal-footer button {
+    margin-right: 10px;
+}
+.tabToggle {
+    padding: 10px 0;
+    text-align: center;
+    color: #999;
+    cursor: default !important;
+}
+.tabToggle:hover{
+    background-color: #fff !important;
+}
+.tabToggle i{
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+.tabToggle span {
+    display: block;
+    font-size: 16px;
+}
+.error {
+    padding-left: 15%;
+    height: 20px;
+    line-height: 20px;
+    color: #d9534f;
+    font-size: 12px;
+    margin-top: -3px;
+}
+
+/*分页*/
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.pagination a {
+    margin-right: 4px;
+}
+.pagination .page-fiter {
+    border: none;
+    margin-right: 0;
+    margin-left: -4px;
+}
+.pagination .page-fiter:hover {
+    background-color: transparent;
+    cursor: default;
+    border: none;
+    color: #337ab7;
+}
+.pagination .page-input{
+    padding: 0;
+    width: 35px;
+    margin-right: 4px;
+}
+.pagination .page-input input {
+    padding: 0;
+    text-align: center;
+}

@@ -1,0 +1,144 @@
+@import url("../../css/bootstrap.min.css");
+@import url("../../fonts/iconfont.css");
+@import url("../../css/animate.css");
+@import url("../../layui/css/modules/layer/default/layer.css");
+html,body{
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+}
+img{
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+a:hover{
+	text-decoration: none;
+	color: inherit;
+}
+ul,ol,li{list-style: none;}
+ul{
+    padding-left: 0;
+}
+.headerBar {
+	width: 100%;
+	height: 60px;
+	background-color: #4d5e70;
+	 box-shadow:4px 5px 13px 2px #fff;
+	 padding-left: 0;
+}
+
+.headerBar-logo{
+	width: 200px;
+	height: 50px;
+	margin-top: 5px;
+	margin-right: 20px;
+	text-align: center;
+}
+
+.headerBar-logo img{
+	display: inline-block;
+	width: 80%;
+	height: 100%;
+
+}
+.headerBar-title {
+	color: #fff;
+	margin-top: 16px;
+	margin-bottom: 0;
+	padding: 0 20px;
+	border-left: 2px solid rgba(255,255,255,0.4);
+}
+.headerBar-info{
+	line-height: 60px;
+	color: #fff;
+	letter-spacing: 1px;
+}
+.header-userName {
+	color: #FF6666;
+}
+.header-line{
+	padding: 0 5px; 
+}
+.header-quit{
+	color: #fff;
+}
+
+.wrap {
+	min-width: 100%;
+	min-height: calc(100% - 60px);
+	height: calc(100% - 60px);
+	position: absolute;
+	overflow: hidden;
+}
+
+.sidebar {
+	position: absolute;
+	left: 0;
+	width: 200px;
+	/*padding:45px 20px;*/
+    padding: 45px 0;
+	height: 100%;
+	background-color: #4d5e70;
+}
+
+.sidebar .menu-title {
+	padding: 10px 20px;
+	font-size: 14px !important;
+	font-weight: bold;
+	color: #828e9a;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+.menu{
+	padding-left: 0;
+}
+.menu li.item-li {
+	padding: 10px 20px;
+	cursor: pointer;
+	color: #aab1b7;
+}
+.menu li.item-li:hover,.menu li.item-li.active{
+    background-color: #423c4c78;
+}
+.menu .iconfont{
+	font-size: 16px;
+	margin-right: 8px;
+}
+
+.wrap-right {
+	min-with:calc(100% - 200px);
+	width: calc(100% - 200px);
+	min-height: 100%;
+	position: absolute;
+	right: 0;
+}
+
+
+/*iframe*/
+.position {
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    padding: 0 15px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.position-list li{
+    float: left;
+}
+.position-list .iconfont {
+    font-size: 12px;
+    padding: 0 5px;
+}
+.position-list li a{
+    color: #666;
+}
+
+.position-list li a:hover {
+    color: #da3838;
+}
+.main{
+    padding: 10px;
+}

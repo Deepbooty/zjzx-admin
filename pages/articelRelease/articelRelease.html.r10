@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文章发布</title>
+    <link rel="stylesheet" href="../admin/admin.css">
+    <link rel="stylesheet" href="articelRelease.css">
+    <style type="text/css">
+    </style>
+</head>
+<body>
+<div id="releaseApp">
+    <div class="main">
+        <div class="table-responsive tab-release">
+            <template>
+            <div class="tab-header">
+                <h4 class="tab-title">文章发布</h4>
+            </div>
+            <div class="tab-body">
+                <div class="form-group tab-release-item clearfix">
+                    <label for="title" class="pull-left text-primary">文章标题：</label>
+                    <div class="input pull-left">
+                        <input type="text" v-focus class="form-control" id="title" placeholder="请输入文章标题" v-model="desc.titleDesc">
+
+
+                    </div>
+                    <p class="pull-left tab-release-tip">
+                        <i class="iconfont icon-required"></i>
+                        <transition  enter-active-class="animated tada" leave-active-class=" animated bounceOut">
+                            <span v-show="show.titleShow">{{tip.titleTip}}</span>
+                        </transition>
+                    </p>
+                </div>
+                <div class="form-group tab-release-item clearfix">
+                    <label for="type" class="pull-left text-primary">文章类型：</label>
+                    <div class="input select pull-left">
+                        <select class="form-control" id="type" v-model="desc.typeDesc">
+                            <option value="" selected disabled>请选择文章类型</option>
+                            <option value="1">图文</option>
+                            <option value="2">视频</option>
+                        </select>
+                    </div>
+                    <p class="pull-left tab-release-tip">
+                        <i class="iconfont icon-required"></i>
+                        <transition  enter-active-class="animated tada" leave-active-class=" animated bounceOut">
+                            <span v-show="show.typeShow">{{tip.typeTip}}</span>
+                        </transition>
+                    </p>
+                </div>
+                <div class="form-group tab-release-item clearfix">
+                    <label for="classify" class="pull-left text-primary">文章分类：</label>
+                    <div class="input select pull-left">
+                        <select class="form-control" id="classify" v-model="desc.classifyDesc">
+                            <option value="" selected disabled>请选择文章分类</option>
+                            <option value="1">揭秘</option>
+                            <option value="2">防骗</option>
+                            <option value="2">打假</option>
+                            <option value="3">寻亲</option>
+                            <option value="4">普法</option>
+                            <option value="5">聚焦</option>
+                            <option value="6">问答</option>
+                        </select>
+                    </div>
+                    <p class="pull-left tab-release-tip">
+                        <i class="iconfont icon-required"></i>
+                        <transition  enter-active-class="animated tada" leave-active-class=" animated bounceOut">
+                            <span v-show="show.classifyShow">{{tip.classifyTip}}</span>
+                        </transition>
+                    </p>
+                </div>
+                <div class="form-group tab-release-item tab-release-editor clearfix">
+                    <label class="pull-left text-primary">文章内容：</label>
+                    <div class="editor pull-left" id="edit">
+                        <div id="editor" v-model="desc.contentDesc" name="content" type="text/plain"></div>
+                    </div>
+                    <p class="pull-left tab-release-tip" style="margin-top: 10%">
+                        <i class="iconfont icon-required"></i>
+                        <transition  enter-active-class="animated tada" leave-active-class=" animated bounceOut">
+                            <span v-show="show.contentShow">{{tip.contentTip}}</span>
+                        </transition>
+                    </p>
+                </div>
+                <button class="btn btn-primary release-bth" @click="handleRelease">发布</button>
+            </div>
+
+            </template>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../../js/commonConfig.js"></script>
+<script type="text/javascript" src="../../plugins/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="../../plugins/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="../../plugins/ueditor/ueditor.parse.js"></script>
+<script type="text/javascript" src="../../plugins/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+    require(["articelRelease.js?a="+new Date().getTime()],function(){
+
+    });
+
+
+</script>
+</body>
+</html>

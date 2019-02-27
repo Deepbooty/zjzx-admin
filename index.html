@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>index.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+    
+
+  </head>
+  
+  <body>
+    This is my HTML page. <br>
+    
+    <div id="ckeditor">
+    	
+    </div>
+   <script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://212.64.1.189:8888/Backstage/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript">
+    	
+		
+		
+   
+	$(function(){
+		
+		$.post("http://212.64.1.189:8585//messageCollect/getArticleById?recordid=336",function(data){
+			var editor = CKEDITOR.replace('ckeditor',{   
+			filebrowserImageUploadUrl : 'http://212.64.1.189:9180/zjzx_file/file/uploadCkeditor',  
+			language : 'zh-cn',  
+			});
+			// data = data.replace("\n","<br/>");
+		//	debugger;
+			var content = data.record.columns.content.replace(/\n/g,"<br/>");
+		
+			editor.setData(content);
+		});
+	});
+	
+	
+	
+    </script>
+    
+  </body>
+</html>

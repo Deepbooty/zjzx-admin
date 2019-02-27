@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>后台登录</title>
+     <link rel="stylesheet" href="/Backstage/pages/login/login.css">
+  
+</head>
+
+<body>
+    <div id="loginApp" class="container-fluid wrap">
+        <div class="sigin">
+            <div class="login-title">
+                <h2>直击真相后台登录</h2>
+                <span>Go straight to the truth</span>
+            </div>
+            <form class="form-horizontal" id="login-form" action="javascript:void(0)" role="form">
+                <div class="form-group form-item">
+                    <i class="iconfont icon-user"></i>
+                    <input type="text"
+                           class="form-control"
+                           :maxlength="maxlength"
+                           id="userName"
+                           name="userName"
+                           v-model="mobile"
+                           placeholder="请输入手机号"
+                           >
+                </div>
+                <span class="text-tip mobile-tip" v-text="mobileError"></span>
+                <div class="form-group form-item">
+                    <i class="iconfont icon-code"></i>
+                    <input type="text"
+                           class="form-control user-code"
+                           :maxlength="maxCode"
+                           id="userCode"
+                           name="code"
+                           v-model="code"
+                           @input="codeInput"
+                           placeholder="请输入四位数验证码">
+                    <button class="login-code" :class="{codeColor,color}"  @click="getCode()" v-text="codeText" :disabled="disabled"></button>
+                </div>
+                <span class="text-tip code-tip" v-text="codeError"></span>
+                <div class="login-btn">
+                    <button class="btn btn-lg btn-danger" id="logining" @click="login()">登录</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+
+    </script>
+    
+    <script type="text/javascript" src="/Backstage/js/commonConfig.js"></script>
+    
+     <script type="text/javascript">
+	 	require(["/Backstage/pages/login/login.js?a="+new Date().getTime()],function(){
+	 	
+	 	});
+	 </script>
+</body>
+
+</html>

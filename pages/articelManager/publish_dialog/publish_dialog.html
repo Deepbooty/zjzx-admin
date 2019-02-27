@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>发布文章弹框</title>
+</head>
+<body>
+    <transition  enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
+        <template>
+            <div class="pulish-dialog" v-show="dialogShow">
+                <div class="mask"></div>
+                <div class="dialog-content">
+                    <div class="dialog-header clearfix">
+                        <h4 class="pull-left">{{title}}</h4>
+                        <span class="pull-right" @click="handleCancel">x</span>
+                    </div>
+
+                    <div class="dialog-body">
+                        <!-- 文章标题 -->
+                        <div class="form-group dialog-item clearfix">
+                            <label for="title" class="pull-left text-primary">文章标题：</label>
+                            <div class="dialog-import dialog-input pull-left" id="titleTips">
+                                <input type="text" class="form-control" id="title" placeholder="请输入文章标题" v-model="record.title" v-focus>
+                            </div>
+                        </div>
+                        <!-- 文章分类 -->
+                        <div class="form-group dialog-item clearfix">
+                            <label for="classify" class="pull-left text-primary">文章分类：</label>
+                            <div class="dialog-import dialog-select pull-left" id="classifyTips">
+                                <select class="form-control" id="classify" v-model="record.classify">
+                                    <option value="0" selected disabled>请选择文章分类</option>
+                                    <option v-for="item in classfyList" :value="item.classifycode">
+                                        {{item.classifyname}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--随机用户名-->
+                        <div class="form-group dialog-item clearfix" v-if="randomShow">
+                            <label class="pull-left text-primary">用户名随机：</label>
+                            <div class="dialog-import dialog-random pull-left text-danger" id="randomTips">
+                                {{randomUsername}}
+                            </div>
+                            <div class="dialog-button pull-left" @click="handleRandom">
+                                随机获取
+                            </div>
+                        </div>
+                        <div class="form-group dialog-item clearfix">
+                            <label for="weight" class="pull-left text-primary">文章权重：</label>
+                            <div class="dialog-import dialog-select pull-left" id="weightTips">
+                                <select class="form-control" id="weight" style="width: 50%;" v-model="record.weight">
+                                    <option :value="item" v-for="item in weightList">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 文章内容 -->
+                        <div class="form-group dialog-item dialog-cont clearfix">
+                            <label class="pull-left text-primary">文章内容：</label>
+                            <div class="dialog-editor pull-left" id="contentTips">
+                                <template>
+                                    <div id="editor" style="height: 300px;" v-html="record.content"></div>
+                                </template>
+
+                            </div>
+                        </div>
+                        <button class="btn btn-primary dialog-btn ql-help" @click="handlePublish">发布</button>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </transition>
+</body>
+</html>

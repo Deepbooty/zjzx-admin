@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>审核模板管理</title>
+    <link rel="stylesheet" href="../admin/admin.css">
+    <link rel="stylesheet" href="templateManager.css">
+    <style type="text/css">
+    </style>
+
+</head>
+<body>
+
+<div id="tempManager">
+    <div class="main">
+        <template>
+            <div class="table-responsive tab-template">
+                <div class="tab-header clearfix">
+                    <h4 class="tab-title pull-left">审核模板</h4>
+                    <button type="button" class="btn btn-primary btn-sm pull-right" @click="handleAdd">新建模板<i class="iconfont icon-new-built"></i></button>
+                </div>
+                <table class="table temp-table">
+                    <thead>
+                        <tr>
+                            <th>{{tempTitle.id}}</th>
+                            <th>{{tempTitle.title}}</th>
+                            <th>{{tempTitle.discription}}</th>
+                            <th>{{tempTitle.content}}</th>
+                            <th>{{tempTitle.userid}}</th>
+                            <th>{{tempTitle.type}}</th>
+                            <th>{{tempTitle.createtime}}</th>
+                            <th>{{tempTitle.handle}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-show="tabToggle" class="tabToggle">
+                            <td colspan="8" align="center">
+                                <i class="iconfont icon-nomsg"></i>
+                                <span>亲、暂无数据哦~~~</span>
+                            </td>
+                        </tr>
+                        <tr v-for="(item,index) in recordList">
+                            <td class="tab-id">{{index+1}}</td>
+                            <td class="tab-tit" :title="item.title">{{item.title}}</td>
+                            <td class="tab-desc" :title="item.discription">{{item.discription}}</td>
+                            <td class="tab-content">{{item.content}}</td>
+                            <td class="tab-userid">{{item.userid}}</td>
+                            <td class="tab-type">{{typeMap[item.type]}}</td>
+                            <td class="tab-createtime">{{item.createtime}}</td>
+                            <td class="tab-btn">
+                                <button type="button" class="btn btn-warning" @click="handleEdit(item)">编辑</button>
+                                <button type="button" class="btn btn-danger" @click="handleDelete(item)">删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                 <ul class="pagination" v-show="showPage">
+                    <li v-show="pageObj.page>1" @click="{pageObj.prev()}"><a href="javascript:void(0)">上一页</a></li>
+                    <li v-show="pageObj.page>5" @click="jumpPage(1)"><a href="javascript:void(0)">1</a></li>
+                    <li v-show="showPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                    <li v-for="num in indexs" @click="jumpPage(num)" :class="{active:pageObj.page==num}"><a href="javascript:void(0)" v-text="num"></a></li>
+                    <li v-show="showPointer" v-if="showLastPointer"><a href="javascript:void(0)" class="page-fiter">...</a></li>
+                    <li @click="{pageObj.next()}" v-show="showPrev"><a href="javascript:void(0)">下一页</a></li>
+                    <!--<li v-show="pageObj.page<pageObj.totalPage-1" @click="jumpPage(pageObj.totalPage)"><a href="javascript:void(0)" v-text="pageObj.totalPage"></a></li>-->
+                    <li><a href="javascript:void(0)" v-text="'总共 '+pageObj.totalPage+' 页'"></a></li>
+                    <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">前往第:</a></li>
+                    <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter page-input"><input type="num" class="form-control inputVal"  v-model="pageObj.changePage"  oninput="value=value.replace(/[^\d]/g,'')"></a></li>
+                    <li v-if="showTip"><a href="javascript:void(0)" class="page-fiter">页</a></li>
+                    <li v-if="showTip" @click="jumpPageSure(pageObj.changePage)"><a href="javascript:void(0)">确定</a></li>
+                </ul>
+            </div>
+        </template>
+    </div>
+
+    <!--弹框-->
+    
+    <div id="publish_dialog">
+    
+    </div>
+    
+    <template>
+        <transition  enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
+            <div class="temp-modal" v-show="dialogShow">
+                <div class="mask" @click="cancel"></div>
+                <div class="temp-modal-content">
+                    <div class="temp-modal-header clearfix">
+                        <h4 class="pull-left" v-text="dialogTit"></h4>
+                        <span class="pull-right" @click="cancel">x</span>
+                    </div>
+                    <div class="temp-modal-body">
+                        <div class="form-group temp-modal-item clearfix">
+                            <label for="title" class="pull-left">标题:</label>
+                            <input type="text"
+                                   class="form-control pull-left"
+                                   id="title"
+                                   placeholder="请输入模板标题..."
+                                   v-model="editList.title">
+                            <span class="required pull-right">*</span>
+                        </div>
+
+                        <div class="error" v-text="error.titError"></div>
+                        <div class="form-group temp-modal-item clearfix">
+                            <label for="discription" class="pull-left">描述:</label>
+                            <input type="text"
+                                   class="form-control pull-left"
+                                   id="discription"
+                                   placeholder="请输入模板描述..."
+                                   v-model="editList.discription">
+                            <span class="required pull-right">*</span>
+                        </div>
+                        <div class="error" v-text="error.descError"></div>
+                        <div class="form-group temp-modal-item clearfix">
+                            <label for="content" class="pull-left">内容:</label>
+                            <textarea class="form-control pull-left"
+                                      placeholder="请输入模板内容..."
+                                      id="content"
+                                      v-model="editList.content"></textarea>
+                            <span class="required pull-right">*</span>
+                        </div>
+                        <div class="error" style="margin-top: 4px;" v-text="error.contError"></div>
+                        <div class="form-group temp-modal-item clearfix">
+                            <label class="pull-left">类型</label>
+                            <div class="select-box pull-left">
+                                <select  class="form-control" v-model="editList.type">
+                                    <option value="0" disabled selected>请选择模板类型</option>
+                                    <option value="1" >审核理由</option>
+                                </select>
+                            </div>
+
+                            <span class="required pull-right">*</span>
+                        </div>
+                        <div class="error" v-text="error.typeError"></div>
+                    </div>
+                    <div class="temp-modal-footer">
+                        <button class="btn btn-primary" @click="sure">提交</button>
+                        <button class="btn btn-danger" @click="cancel">取消</button>
+                    </div>
+
+                </div>
+            </div>
+        </transition>
+
+    </template>
+</div>
+
+<script type="text/javascript" src="../../js/commonConfig.js"></script>
+
+<script type="text/javascript">
+    require(["templateManager.js?a="+new Date().getTime()],function(){
+
+    });
+
+
+</script>
+
+</body>
+</html>
